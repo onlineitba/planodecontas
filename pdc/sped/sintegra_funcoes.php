@@ -447,6 +447,10 @@ $tot_registro_bloco=0;
                   case "05": // Inutilizada
                        $situacao='4';
                        break;
+                  case "06": // NF-e Complementar
+                       $situacao='S';
+                       break;
+                       
 
               }
 
@@ -811,7 +815,7 @@ $soma_piscofins=0.00;
                   while ($v= mysql_fetch_assoc($sql_lancamentos)){
 
                           $dono=$v['dono'];
-
+   
                           $documento=$v['documento'];
                           if(substr($documento,0,2)=='NF'){      //documento que come?am com NF
                              $documento=substr($documento,2);
@@ -2437,15 +2441,16 @@ return;
 
 //REGISTROS TIPO 74  REGISTRO DE INVENT?RIO
 function sintegra_registro_74() {
-global $info_segmento,$fp,$lanperiodo1,$lanperiodo2,$PRODUTOS_INVENTARIO,$info_segmento,$qtde_linha_bloco_74,$REG_BLC,$tot_74,$info_cnpj_segmento;
+global $info_segmento,$fp,$lanperiodo1,$lanperiodo2,$PRODUTOS_INVENTARIO,$info_segmento,$qtde_linha_bloco_74,$REG_BLC,$tot_74,$info_cnpj_segmento,$data_inventario;
 $sql_lancamentos= mysql_query("SELECT * FROM $PRODUTOS_INVENTARIO");
                   $tot_registro_bloco=0;
                   while ( $v = mysql_fetch_assoc($sql_lancamentos) ) {
 
 
-                          $conta=$v['cprod'];
+                          $conta=strtoupper($v['cprod']); // Ficar maiusculo igual ao registro 75
                           $tamanho14=14;
                           $conta=_myfunc_espaco_a_direita($conta,$tamanho14);
+                          $conta=substr($conta,-14); // Estava ficando com código maior que 14
 
 
                           $qtd=$v['sqtotal'];
@@ -2488,9 +2493,10 @@ $sql_lancamentos= mysql_query("SELECT * FROM $PRODUTOS_INVENTARIO");
                           $tamanho45=45;
                           $branco=_myfunc_espaco_a_direita($branco,$tamanho45);
 
-                          $data=$lanperiodo1;
-                          $data=_myfunc_stod($data);
-                          $data=_myfunc_aaaammdd($data);
+                         // Para pegar a data do inventário e não o periodo do sintegra
+                          //$data=$lanperiodo1;
+                          //$data=_myfunc_stod($data);
+                          $data=_myfunc_aaaammdd($data_inventario); //_myfunc_aaaammdd($data);
                           $tamanho8=8;
                           $data=_myfunc_zero_a_esquerda($data,$tamanho8) ;
 
@@ -2825,7 +2831,7 @@ exit;
 
 
 
-                       $sql_csosn="update $lancamentos_pdf set csosn='500' where csosn='102'";
+                     $sql_csosn="update $lancamentos_pdf set csosn='500' where csosn='102'";
                     if (mysql_query($sql_csosn) or die (mysql_error()) ) {
                     }
                        $sql_is="update $lancamentos_pdf set svisent=svprod where csosn='400'";
