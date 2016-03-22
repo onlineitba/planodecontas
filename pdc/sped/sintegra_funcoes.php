@@ -40,10 +40,9 @@ if($box_inventario=='on'){
     
     //echo '<br><br>|'.$old_dtos.'|'.$id_data.'|'.$dtos.'|'.$sdata_inventario.'|'.$dt_periodo2.'|';
 
-    //include('produtos_tabela_inventario.php');
+   // include('produtos_tabela_inventario.php');
 
-    //$arq_inventario='produtos_inventario_'.$info_cnpj.'_'.$cnpjcpf_segmento; 
-    $arq_inventario='produtos_inventario_'.$cnpjcpf_segmento; 
+	$arq_inventario='produtos_inventario_'.$info_cnpj.'_'.$cnpjcpf_segmento; 
 
     echo "<br> Tabela $arq_inventario invent&aacute;rio gerada com sucesso! <br>";
     flush();
